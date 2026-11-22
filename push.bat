@@ -5,4 +5,4 @@ git add .
 git commit -m "Automatische update van script en assets"
 git push
 echo Synchronisatie voltooid!
-timeout /t 3
+timeout /t 5
