@@ -1,9 +1,0 @@
-@echo off
-cd /d "%~dp0"
-echo Bezig met synchroniseren van je script en assets naar GitHub...
-git add .
-git commit -m "Automatische update van script en assets"
-git push
-echo Synchronisatie voltooid!
-echo Je mag deze window wel sluiten, hoor.
-timeout /t 5
