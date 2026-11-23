@@ -9,3 +9,7 @@ No annoying assistent, no Ai-bot on the top of your screen.
 ## Adressment of A.I
 Though AI is very helpful (and also taking over the world) the **Quill Team** doesn't use AI in any way. 
 No ai has been involved in designing and coding. The project is meant to be made by and made for humans.
+
+## Thanks
+Thanks to **Samir Tine** for making LuaRT and making awesome examples that we could use in the process of making this project.
+Thanks to **FLITNB** for setting up the repository and bringing the project to life.
