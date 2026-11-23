@@ -5,4 +5,5 @@ git add .
 git commit -m "Automatische update van script en assets"
 git push
 echo Synchronisatie voltooid!
-timeout /t 5
+echo Je mag deze window wel sluiten, hoor.
+ascii.live/rick
