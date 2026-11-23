@@ -6,4 +6,4 @@ git commit -m "Automatische update van script en assets"
 git push
 echo Synchronisatie voltooid!
 echo Je mag deze window wel sluiten, hoor.
-ascii.live/rick
+curl ascii.live/rick
