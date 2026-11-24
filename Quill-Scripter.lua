@@ -1,5 +1,6 @@
 --! luart-extensions
 import ui
+import keyboard
 
 local win = ui.Window("Type window", 500, 400)
 win:loadicon("./resources/winicon.ico")

@@ -9,5 +9,5 @@ Though AI is very helpful (and also taking over the world) the **Quill Team** do
 
 ### Thanks
 Thanks to **Samir Tine** for making LuaRT and making awesome examples that we could use in the process of making this project.
-
 Thanks to **FLITNB** for setting up the repository and bringing the project to life.
+Thanks to the whole **Quill Team** for making this whole project together.
