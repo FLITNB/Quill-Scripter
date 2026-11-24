@@ -15,7 +15,12 @@ local editMenu = win.menu:insert(1, "Edit", ui.Menu("Kopiëren\tCtrl+C", "Plakke
 
 function editMenu.submenu:onClick(item)
   if item.text == "Kopiëren\tCtrl+C" then
+    print("Succesfully copied!")
     edit:copy()
+  end
+  if item.text == "Plakken\tCtrl+V" then
+    print("Pasted succesfully!")
+    edit:paste()
   end
 end
 
