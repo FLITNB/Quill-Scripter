@@ -17,6 +17,15 @@ local lines = { "" }
 local line_height = 18
 local cursor_visible = true
 
+function addText(char)
+  local current = lines[#lines]
+  if canvas:measure(current .. char).width > canvas.width - 20 and #current > 0 then
+    lines[#lines + 1] = char
+  else
+    lines[#lines] = current .. char
+  end
+end
+
 -- configure the input of the keys
 function win:onKey(key)
   local pressed = tostring(key)
@@ -35,51 +44,51 @@ function win:onKey(key)
     end
     
   elseif pressed == "VK_SPACE" then
-    lines[#lines] = lines[#lines] .. " "
+    addText(" ")
   elseif pressed == "VK_OEM_COMMA" then
-    lines[#lines] = lines[#lines] .. (shift and "<" or ",")
+    addText(shift and "<" or ",")
   elseif pressed == "VK_OEM_PERIOD" then
-    lines[#lines] = lines[#lines] .. (shift and ">" or ".")
+    addText(shift and ">" or ".")
   elseif pressed == "VK_OEM_1" then
-    lines[#lines] = lines[#lines] .. (shift and ":" or ";")
+    addText(shift and ":" or ";")
   elseif pressed == "VK_OEM_2" then
-    lines[#lines] = lines[#lines] .. (shift and "?" or "/")
+    addText(shift and "?" or "/")
   elseif pressed == "VK_OEM_3" then
-    lines[#lines] = lines[#lines] .. (shift and "~" or "`")
+    addText(shift and "~" or "`")
   elseif pressed == "VK_OEM_4" then
-    lines[#lines] = lines[#lines] .. (shift and "{" or "[")
+    addText(shift and "{" or "[")
   elseif pressed == "VK_OEM_5" then
-    lines[#lines] = lines[#lines] .. (shift and "|" or "\\")
+    addText(shift and "|" or "\\")
   elseif pressed == "VK_OEM_6" then
-    lines[#lines] = lines[#lines] .. (shift and "}" or "]")
+    addText(shift and "}" or "]")
   elseif pressed == "VK_OEM_7" then
-    lines[#lines] = lines[#lines] .. (shift and '"' or "'")
+    addText(shift and '"' or "'")
   
   elseif #pressed == 1 then
     if shift and pressed == "0" then
-      lines[#lines] = lines[#lines] .. ")"
+      addText(")")
     elseif shift and pressed == "1" then
-      lines[#lines] = lines[#lines] .. "!"
+      addText("!")
     elseif shift and pressed == "2" then
-      lines[#lines] = lines[#lines] .. "@"
+      addText("@")
     elseif shift and pressed == "3" then
-      lines[#lines] = lines[#lines] .. "#"
+      addText("#")
     elseif shift and pressed == "4" then
-      lines[#lines] = lines[#lines] .. "$"
+      addText("$")
     elseif shift and pressed == "5" then
-      lines[#lines] = lines[#lines] .. "%"
+      addText("%")
     elseif shift and pressed == "6" then
-      lines[#lines] = lines[#lines] .. "^"
+      addText("^")
     elseif shift and pressed == "7" then
-      lines[#lines] = lines[#lines] .. "&"
+      addText("&")
     elseif shift and pressed == "8" then
-      lines[#lines] = lines[#lines] .. "*"
+      addText("*")
     elseif shift and pressed == "9" then
-      lines[#lines] = lines[#lines] .. "("
+      addText("(")
     elseif shift then
-      lines[#lines] = lines[#lines] .. pressed:upper()
+      addText(pressed:upper())
     else
-      lines[#lines] = lines[#lines] .. pressed:lower()
+      addText(pressed:lower())
     end
   end
 
