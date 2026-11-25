@@ -1,82 +1,110 @@
 --! luart-extensions
-import ui
 import keyboard
+import ui
+require "canvas"
 
-local win = ui.Window("Type window", 500, 400)
-win:loadicon("./resources/winicon.ico")
+-- create a window
+local win = ui.Window("Test", 500, 500)
 
-local booktext = "Jouw boek begint hier"
+-- create a canvas
+local canvas = ui.Canvas(win, 250, 250)
+canvas.bgcolor = 0x0F0F0F0FF
+canvas.color = 0x000000FF
 
-local edit = ui.Edit(win, booktext, 20, 50, 10, 10)
-edit.wordwrap = true
-edit:center()
+local lines = { "" }
+local line_height = 18
 
-win.menu = ui.Menu()
-local editMenu = win.menu:insert(1, "Edit", ui.Menu("Kopiëren\tCtrl+C", "Plakken\tCtrl+V", "Alles selecteren\tCtrl+A"))
+-- configure the input of the keys
+function win:onKey(key)
+  local pressed = tostring(key)
+  local shift = keyboard.isdown("SHIFT")
+  win:status("Pressed key: " .. pressed)
 
-function editMenu.submenu:onClick(item)
-  if item.text == "Kopiëren\tCtrl+C" then
-    print("Succesfully copied!")
-    edit:copy()
+  if pressed == "VK_RETURN" then
+    lines[#lines + 1] = ""
+    
+  elseif pressed == "VK_BACK" then
+    local last = lines[#lines]
+    if #last > 0 then
+      lines[#lines] = last:sub(1, -2)
+    elseif #lines > 1 then
+      table.remove(lines)
+    end
+    
+  elseif pressed == "VK_SPACE" then
+    lines[#lines] = lines[#lines] .. " "
+  elseif pressed == "VK_OEM_COMMA" then
+    lines[#lines] = lines[#lines] .. (shift and "<" or ",")
+  elseif pressed == "VK_OEM_PERIOD" then
+    lines[#lines] = lines[#lines] .. (shift and ">" or ".")
+  elseif pressed == "VK_OEM_1" then
+    lines[#lines] = lines[#lines] .. (shift and ":" or ";")
+  elseif pressed == "VK_OEM_2" then
+    lines[#lines] = lines[#lines] .. (shift and "?" or "/")
+  elseif pressed == "VK_OEM_3" then
+    lines[#lines] = lines[#lines] .. (shift and "~" or "`")
+  elseif pressed == "VK_OEM_4" then
+    lines[#lines] = lines[#lines] .. (shift and "{" or "[")
+  elseif pressed == "VK_OEM_5" then
+    lines[#lines] = lines[#lines] .. (shift and "|" or "\\")
+  elseif pressed == "VK_OEM_6" then
+    lines[#lines] = lines[#lines] .. (shift and "}" or "]")
+  elseif pressed == "VK_OEM_7" then
+    lines[#lines] = lines[#lines] .. (shift and '"' or "'")
+  
+  elseif #pressed == 1 then
+    if shift and pressed == "0" then
+      lines[#lines] = lines[#lines] .. ")"
+    elseif shift and pressed == "1" then
+      lines[#lines] = lines[#lines] .. "!"
+    elseif shift and pressed == "2" then
+      lines[#lines] = lines[#lines] .. "@"
+    elseif shift and pressed == "3" then
+      lines[#lines] = lines[#lines] .. "#"
+    elseif shift and pressed == "4" then
+      lines[#lines] = lines[#lines] .. "$"
+    elseif shift and pressed == "5" then
+      lines[#lines] = lines[#lines] .. "%"
+    elseif shift and pressed == "6" then
+      lines[#lines] = lines[#lines] .. "^"
+    elseif shift and pressed == "7" then
+      lines[#lines] = lines[#lines] .. "&"
+    elseif shift and pressed == "8" then
+      lines[#lines] = lines[#lines] .. "*"
+    elseif shift and pressed == "9" then
+      lines[#lines] = lines[#lines] .. "("
+    elseif shift then
+      lines[#lines] = lines[#lines] .. pressed:upper()
+    else
+      lines[#lines] = lines[#lines] .. pressed:lower()
+    end
   end
-  if item.text == "Plakken\tCtrl+V" then
-    print("Pasted succesfully!")
-    edit:paste()
-  end
+
+  canvas:onPaint()
 end
 
-win:show()
+function canvas:onPaint()
+  self:begin()
+  self:clear()
 
-local function changeTheme()
-  if ui.systheme == "dark" then
-    ui.theme = "dark"
+  for i, line in ipairs(lines) do
+    local y = 10 + (i - 1) * line_height
+    self:print(line, 10, y)
   end
-  
-  if ui.systheme == "light" then
-    ui.theme = "light"
-  end
-end
 
-local function updateSize()
-  local ratio = 1.414
-  
-  local margin = 40
-  local max_width = win.width - (margin * 2)
-  local max_height = win.height - (margin * 2)
-  
-  local w = max_width
-  local h = w * ratio
-  
-  if h > max_height then
-    h = max_height
-    w = h / ratio
-  end
-  
-  edit.width = math.floor(w)
-  edit.height = math.floor(h)
-  edit:center()
-end
-
-function edit:onClick()  
-  if edit.text == booktext then
-    edit.text = ""
-  end
-end
-
-function win:onClick()
-  if edit.text == "" then
-    edit.text = booktext
-  end
-end
-
-function win:onCreate()
-  updateSize()
+  self:flip()
 end
 
 function win:onResize()
-  updateSize()
+  canvas:center()
+  canvas.height = win.height / 2
+  canvas.width = win.width / 2
 end
 
-changeTheme()
+function win:onCreate()
+  canvas:center()
+  canvas.height = win.height / 2
+  canvas.width = win.width / 2
+end
 
 await win:showasync()
