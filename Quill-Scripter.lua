@@ -17,7 +17,28 @@ local lines = { "" }
 local line_height = 18
 local cursor_visible = true
 
-function addText(char)
+-- make the size of the canvas a4 according to the window
+local function updateA4Size()
+  local ratio = 1.1414
+  
+  local margin = 40
+  local max_width = win.width - (margin * 2)
+  local max_height = win.height - (margin * 2)
+  
+  local w = max_width
+  local h = w * ratio
+  
+  if h > max_height then
+    h = max_height
+    w = h / ratio
+  end
+  
+  canvas.width = math.floor(w)
+  canvas.height = math.floor(h)
+  canvas:center()
+end
+
+local function addText(char)
   local current = lines[#lines]
   if canvas:measure(current .. char).width > canvas.width - 20 and #current > 0 then
     lines[#lines + 1] = char
@@ -120,16 +141,12 @@ end
 
 -- Resize and center the canvas when the window gets resized
 function win:onResize()
-  canvas:center()
-  canvas.height = win.height / 2
-  canvas.width = win.width / 2
+  updateA4Size()
 end
 
 -- Resize and center the canvas when the window gets created
 function win:onCreate()
-  canvas:center()
-  canvas.height = win.height / 2
-  canvas.width = win.width / 2
+  updateA4Size()
   
   local blink = async function()
     while win.visible do
