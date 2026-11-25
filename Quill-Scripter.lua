@@ -5,7 +5,7 @@ import ui
 require "canvas"
 
 -- create a window
-local win = ui.Window("Test", 500, 500)
+local win = ui.Window("Quill Scripter", 500, 500)
 win:loadicon("resources\\winicon.ico")
 
 -- create a canvas
