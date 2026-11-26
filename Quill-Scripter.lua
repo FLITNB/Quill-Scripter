@@ -1,4 +1,7 @@
 --! luart-extensions
+-- Quill-Scripter: An open-source wordprocessing app written in LuaRT
+-- © FLITNB
+
 import keyboard
 import sys
 import ui
@@ -83,11 +86,11 @@ function win:onKey(key)
     
   elseif pressed == "VK_BACK" then
     if cursor_col > 0 then
-      local current = lines[curso_row]
+      local current = lines[cursor_row]
       local before = current:sub(1, cursor_col - 1)
       local after = current:sub(cursor_col + 1)
       lines[cursor_row] = before .. after
-      cursor_col = cursor_col -1
+      cursor_col = cursor_col - 1
     elseif cursor_row > 1 then
       local prev_len = #lines[cursor_row - 1]
       lines[cursor_row - 1] = lines[cursor_row - 1] .. lines[cursor_row]
