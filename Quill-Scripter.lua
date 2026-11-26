@@ -25,7 +25,7 @@ local cursor_col = 0
 
 -- make the size of the canvas a4 according to the window
 local function updateA4Size()
-  local ratio = 1.1414
+  local ratio = math.sqrt(2)
   
   local margin = 40
   local max_width = win.width - (margin * 2)
@@ -71,8 +71,7 @@ end
 function win:onKey(key)
   local pressed = tostring(key)
   local shift = keyboard.isdown("SHIFT")
-  win:status("Pressed key: " .. pressed)
-
+  
   if pressed == "VK_RETURN" then
     local current = lines[cursor_row]
     local before = current:sub(1, cursor_col)
@@ -235,6 +234,9 @@ end
 
 function deleteAll()
   lines = { "" }
+  cursor_row = 1
+  cursor_col = 0
+  canvas:onPaint()
 end
 
 win:shortcut("o", deleteAll, true)
