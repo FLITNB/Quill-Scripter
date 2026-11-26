@@ -98,6 +98,16 @@ function win:onKey(key)
       cursor_row = cursor_row - 1
       cursor_col = prev_len
     end 
+  elseif pressed == "VK_DELETE" then
+    local current = lines[cursor_row]
+    if cursor_col < #current then
+      local before = current:sub(1, cursor_col)
+      local after = current:sub(cursor_col + 2)
+      lines[cursor_row] = before .. after
+    elseif cursor_row < #lines then
+      lines[cursor_row] = current .. lines[cursor_row + 1]
+      table.remove(lines, cursor_row + 1)
+    end
     
   elseif pressed == "VK_SPACE" then
     addText(" ")
@@ -119,6 +129,7 @@ function win:onKey(key)
     addText(shift and "}" or "]")
   elseif pressed == "VK_OEM_7" then
     addText(shift and '"' or "'")
+    
   elseif pressed == "VK_LEFT" then
     if cursor_col > 0 then
       cursor_col = cursor_col - 1
@@ -221,5 +232,11 @@ function win:onCreate()
   end
   blinkCursor()
 end
+
+function deleteAll()
+  lines = { "" }
+end
+
+win:shortcut("o", deleteAll, true)
 
 await win:showasync()
