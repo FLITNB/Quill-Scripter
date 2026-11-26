@@ -2,19 +2,31 @@
 The Quill Scripter repository is now available!
 
 ### The plan:
-The whole premise of Quill Scripter is to create an office environment without an annoying AI bot at the top of your screen or pop-ups that block your view. It only has the essentials and some fun features. Every feature can be turned off if you wish.
+The core premise of Quill Scripter is to create an office environment without an annoying AI bot at the top of your screen or pop-ups that block your view. 
+
+It only has the essentials and some fun features. Every feature can be turned off if you wish.
 
 ### The process:
-Until now, we have only discussed the plan, but it is still in development. The development process is enjoyable and does not require too much research.
-We plan on doing more in the future, such as creating a whole Quill Office, but that is not now. The project is made in LuaRT, wich is an amazing framework for Lua, wich is the first coding language learnt by the developer.
-Although the Quill Team is working hard, it still only consists of two people. Right now, we are experimenting with different things, and some of them are working well.
-The work is split equally between us and we are both working very hard on this project.
-I won't disclose the names of any developer or designer.
+Right now, Quill Scripter is actively in development. 
+Building it has been fun and we already have bigger plans in the back of our minds, like expanding this into a whole **Quill Office** suite!
+
+The project is built with **LuaRT**, an awesome framework for Lua (which also happened to be the first language our developer learned). The Quill Team currently consist of two people. We are currently experimenting with new things, and a lot of them actually work!
 
 ### Addressing A.I.
-Although A.I. is very helpful (and is also taking over the world), the Quill Team doesn't use it, and we're proud of that. No AI has been involved in the design or coding. This project is intended for and by humans.
+Although A.I. is very helpful (and is also taking over the world with vibe coders everywhere), the Quill Team doesn't use it, and we're proud of that. 
 
-### Thanks
+**No AI has been involved in the design or coding of this project.**
+
+We're not against AI, we just don't need to use it in this project.
+
+### Credits and thanks
 Thanks to **Samir Tine** for creating LuaRT and providing awesome examples that we could use in developing this project. 
-Thanks also to **FLITNB** for setting up the repository and bringing the project to life.
-Thanks to the **Quill team** for working together to create this project.
+
+Thanks to **FLITNB** for setting up the repository and coding the project.
+
+Thanks to **Lunarbean** for designing the user interface and being amazing.
+
+### License and usage
+This project is open-source under the **MIT** license, so anyone is more than welcome to use it. Just make sure to credit the Quill Team.
+You can use the scripter as is, build your own with the help of our code, borrow specific parts for your own projects, you name it.
+We hope this has inspired people to make their own things or use LuaRT. Let us know if you want!

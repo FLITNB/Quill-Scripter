@@ -15,7 +15,10 @@ canvas.color = 0x000000FF
 
 local lines = { "" }
 local line_height = 18
+
 local cursor_visible = true
+local cursor_row = 1
+local cursor_col = 0
 
 -- make the size of the canvas a4 according to the window
 local function updateA4Size()
@@ -39,11 +42,25 @@ local function updateA4Size()
 end
 
 local function addText(char)
-  local current = lines[#lines]
-  if canvas:measure(current .. char).width > canvas.width - 20 and #current > 0 then
-    lines[#lines + 1] = char
+  local current = lines[cursor_row]
+  local before = current:sub(1, cursor_col)
+  local after = current:sub(cursor_col + 1)
+  local updated = before .. char .. after
+  
+  if canvas:measure(updated).width > canvas.width - 20 and #current > 0 then
+    if cursor_col == #current then
+      table.insert(lines, cursor_row + 1, char)
+      cursor_row =  cursor_row + 1
+      cursor_col = 1
+    else
+      local last_char = update:sub(-1)
+      lines[cursor_row] = updated:sub(1, -2)
+      table.insert(lines, cursor_row + 1, last_char)
+      cursor_col = cursor_col + 1
+    end
   else
-    lines[#lines] = current .. char
+    lines[cursor_row] = updated
+    cursor_col = cursor_col + 1
   end
 end
 
@@ -54,15 +71,30 @@ function win:onKey(key)
   win:status("Pressed key: " .. pressed)
 
   if pressed == "VK_RETURN" then
-    lines[#lines + 1] = ""
+    local current = lines[cursor_row]
+    local before = current:sub(1, cursor_col)
+    local after = current:sub(cursor_col + 1)
+    
+    lines[cursor_row] = before
+    table.insert(lines, cursor_row + 1, after)
+    cursor_row = cursor_row + 1
+    cursor_col = 0
+    
     
   elseif pressed == "VK_BACK" then
-    local last = lines[#lines]
-    if #last > 0 then
-      lines[#lines] = last:sub(1, -2)
-    elseif #lines > 1 then
-      table.remove(lines)
-    end
+    if cursor_col > 0 then
+      local current = lines[curso_row]
+      local before = current:sub(1, cursor_col - 1)
+      local after = current:sub(cursor_col + 1)
+      lines[cursor_row] = before .. after
+      cursor_col = cursor_col -1
+    elseif cursor_row > 1 then
+      local prev_len = #lines[cursor_row - 1]
+      lines[cursor_row - 1] = lines[cursor_row - 1] .. lines[cursor_row]
+      table.remove(lines, cursor_row)
+      cursor_row = cursor_row - 1
+      cursor_col = prev_len
+    end 
     
   elseif pressed == "VK_SPACE" then
     addText(" ")
@@ -84,6 +116,34 @@ function win:onKey(key)
     addText(shift and "}" or "]")
   elseif pressed == "VK_OEM_7" then
     addText(shift and '"' or "'")
+  elseif pressed == "VK_LEFT" then
+    if cursor_col > 0 then
+      cursor_col = cursor_col - 1
+    elseif cursor_row > 1 then
+      cursor_row = cursor_row - 1
+      cursor_col = #lines[cursor_row]
+    end
+  elseif pressed == "VK_RIGHT" then
+    if cursor_col < #lines[cursor_row] then
+      cursor_col = cursor_col + 1
+    elseif cursor_row < #lines then
+      cursor_row = cursor_row + 1
+      cursor_col = 0
+    end
+  elseif pressed == "VK_UP" then
+    if cursor_row > 1 then
+      cursor_row = cursor_row - 1
+      if cursor_col > #lines[cursor_row] then
+        cursor_col = #lines[cursor_row]
+      end
+    end
+  elseif pressed == "VK_DOWN" then
+    if cursor_row < #lines then
+      cursor_row = cursor_row + 1
+      if cursor_col > #lines[cursor_row] then
+        cursor_col = #lines[cursor_row]
+      end
+    end
   
   elseif #pressed == 1 then
     if shift and pressed == "0" then
@@ -128,12 +188,13 @@ function canvas:onPaint()
   end
   
   if cursor_visible then
-    local last_line = lines[#lines]
-    local last_y = 10 + (#lines - 1) * line_height
-    local text_size = self:measure(last_line)
+    local active_line = lines[cursor_row]
+    local text_before_cursor = active_line:sub(1, cursor_col)
+    local cursor_y = 10 + (cursor_row - 1) * line_height
+    local text_size = self:measure(text_before_cursor)
     local cursor_x = 10 + text_size.width
     
-    self:line(cursor_x, last_y, cursor_x, last_y + line_height -    2)
+    self:line(cursor_x, cursor_y, cursor_x, cursor_y + line_height - 2)
   end
 
   self:flip()
@@ -148,14 +209,14 @@ end
 function win:onCreate()
   updateA4Size()
   
-  local blink = async function()
+  local blinkCursor = async function()
     while win.visible do
       sleep(500)
       cursor_visible = not cursor_visible
       canvas:onPaint()
     end
   end
-  blink()
+  blinkCursor()
 end
 
 await win:showasync()
